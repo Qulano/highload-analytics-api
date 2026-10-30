@@ -7,7 +7,7 @@ from schemas import OrderCreateSchema
 async def lifespan(app: FastAPI):
     await init_db_pool()
     yield
-    await close_db_pool
+    await close_db_pool()
 
 app = FastAPI(title="Warehouse Analytics API", lifespan=lifespan)
 
