@@ -10,3 +10,6 @@ DB_CONFIG = {
     "user": os.getenv("DB_USER", "qulano"),
     "password": os.getenv("DB_PASSWORD")
 }
+
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))

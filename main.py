@@ -1,7 +1,8 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, Query, HTTPException, status
-from database import init_db_pool, close_db_pool, get_db_pool
+from database import init_db_pool, close_db_pool, get_db_pool, get_redis
 from schemas import OrderCreateSchema
+import json
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -12,7 +13,14 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Warehouse Analytics API", lifespan=lifespan)
 
 @app.get("/analytics")
-async def get_analytics(pool = Depends(get_db_pool)):
+async def get_analytics(pool = Depends(get_db_pool), redis = Depends(get_redis)):
+    cached_data = await redis.get("analytics_cache")
+    
+    if cached_data:
+        print("[REDIS] Отдаем результат из ОПЕРАТИВНОЙ ПАМЯТИ за 0.5 мс!")
+        return json.loads(cached_data)
+    
+    print("[POSRTGRESQL] Кэша нет. Делаем SQL-запрос в базу...")
     async with pool.acquire() as connection:
         
         query = '''
@@ -24,7 +32,7 @@ async def get_analytics(pool = Depends(get_db_pool)):
         
         rows = await connection.fetch(query)
         
-        return [
+        result = [
             {
                 "client_name": row[0],
                 "total_orders": row[1],
@@ -32,6 +40,8 @@ async def get_analytics(pool = Depends(get_db_pool)):
             }
             for row in rows
         ]
+    await redis.set("analytics_cache", json.dumps(result), ex=60)
+    return result
     
     
 
