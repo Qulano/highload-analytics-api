@@ -13,3 +13,5 @@ DB_CONFIG = {
 
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+API_URL = os.getenv("API_URL", "http://127.0.0.1:8000   ")

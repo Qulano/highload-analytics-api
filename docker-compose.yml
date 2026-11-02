@@ -37,5 +37,16 @@ services:
       - db
       - redis
 
+  bot:
+    build: .
+    container_name: warehouse_bot
+    restart: always
+    command: python bot.py
+    environment:
+      BOT_TOKEN: ${BOT_TOKEN}
+      API_URL: http://api:8000
+    depends_on:
+      - api
+
 volumes:
   postgres_data:
