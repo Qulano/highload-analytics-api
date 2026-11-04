@@ -114,3 +114,22 @@ py -m pytest
 | GET |	/orders/{id} | Single order lookup by ID (404 if not found) |
 | POST | /orders | Create new order (validated via Pydantic Schema) |
 | DELETE | /orders/{id} | Idempotent order deletion via SQL RETURNING id |
+
+
+## 📸 Live Demo & High-Load Benchmarks
+
+### 1. Telegram Executive Assistant (`aiogram 3`)
+Direct real-time communication channel for management, fetching aggregated reports via the FastAPI gateway:
+
+![Telegram Bot Demo](assets/telegram_bot_demo.png)
+
+---
+
+### 2. High-Load Stress Testing Results (`Locust`)
+Load testing simulation under peak concurrency of **100 distributed users**, delivering **318+ RPS** with **0% failure rate** and sub-millisecond response latency via Redis caching:
+
+#### Real-Time Throughput & Concurrency Charts:
+![Locust Charts](assets/locust_charts.png)
+
+#### Detailed Endpoint Latency & Performance Breakdown:
+![Locust Statistics](assets/locust_stats.png)
