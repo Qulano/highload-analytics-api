@@ -4,3 +4,4 @@ class OrderCreateSchema(BaseModel):
     item: str = Field(min_length=2, max_length=100)
     price: int = Field(gt=0)
     client_id: int = Field(gt=0)
+    discout: int = Field(default=0, ge=0)

@@ -50,11 +50,11 @@ async def create_orders(order: OrderCreateSchema, pool = Depends(get_db_pool)):
     async with pool.acquire() as connection:
             
             query = '''
-                INSERT INTO orders (item, price, client_id)
-                VALUES ($1, $2, $3)
+                INSERT INTO orders (item, price, client_id, dicount)
+                VALUES ($1, $2, $3, $4)
                 RETURNING id;
             '''
-            new_id = await connection.fetchval(query, order.item, order.price, order.client_id)
+            new_id = await connection.fetchval(query, order.item, order.price, order.client_id, order.discount)
             
     return {
         "status": "success",
